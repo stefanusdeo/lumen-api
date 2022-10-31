@@ -25,6 +25,13 @@ class PaymentVaController extends Controller
             'amount' => 'required|numeric',
         ]);
 
+        if (!$request->header('X-BBW-Timestamp') || !$request->header('X-BBW-Signature')) {
+            return response([
+                'rc' => '001',
+                'message' => 'header Not Complate'
+            ], 401);
+        }
+
         try {
             DB::beginTransaction();
 
